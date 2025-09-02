@@ -6,7 +6,11 @@ const Notes = () => {
   const { searchStatus } = useNote();
   return (
     <>
-      {!searchStatus ? (
+      {searchStatus ? (
+        <div className="w-full mt-5">
+          <SearchResults />
+        </div>
+      ) : (
         <div className="flex flex-col px-4">
           <div className="w-full">
             <CreateNote />
@@ -15,10 +19,6 @@ const Notes = () => {
           <div className="w-full mt-5">
             <NoteList />
           </div>
-        </div>
-      ) : (
-        <div className="w-full mt-5">
-          <SearchResults />
         </div>
       )}
     </>
