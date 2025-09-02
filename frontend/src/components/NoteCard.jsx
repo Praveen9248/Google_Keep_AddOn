@@ -8,9 +8,10 @@ import { ID } from "appwrite";
 import { useNote } from "../contexts";
 import { MdOutlineUnarchive } from "react-icons/md";
 import { TbPinnedFilled } from "react-icons/tb";
+import { RiGeminiLine } from "react-icons/ri";
 
 const NoteCard = ({ note }) => {
-  const { removeNote, addImage, noteStatusHandle } = useNote();
+  const { removeNote, addImage, noteStatusHandle, aiNoteHandler } = useNote();
   const fileInputRef = useRef(null);
 
   const [backgroundColor, setBackgroundColor] = useState(note.color);
@@ -53,6 +54,21 @@ const NoteCard = ({ note }) => {
 
             <p className="text-base">{note.content}</p>
           </div>
+          <br />
+          {note.summary ? (
+            <div>
+              Summary:
+              <p>{note.summary}</p>
+            </div>
+          ) : null}
+          <br />
+          {note.labels ? (
+            <div className="flex flex-wrap gap-x-2">
+              {note.labels.map((label) => (
+                <p key={label}>{label}</p>
+              ))}
+            </div>
+          ) : null}
         </div>
         <div className="flex justify-between items-center px-1 lg:invisible group-hover:visible text-xl">
           <span>
@@ -130,6 +146,16 @@ const NoteCard = ({ note }) => {
               }}
             >
               <MdOutlineDelete />
+            </button>
+          </span>
+          <span>
+            <button
+              className="hover:bg-gray-400 rounded-full p-2"
+              onClick={() => {
+                aiNoteHandler(note.$id);
+              }}
+            >
+              <RiGeminiLine />
             </button>
           </span>
         </div>

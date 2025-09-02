@@ -9,6 +9,7 @@ import TrashList from "./TrashList";
 import TrashedNoteCard from "./TrashedNoteCard";
 import Login from "./Login";
 import Register from "./Register";
+import SearchResults from "./SearchResults";
 
 export {
   NoteCard,
@@ -22,4 +23,5 @@ export {
   TrashedNoteCard,
   Login,
   Register,
+  SearchResults,
 };

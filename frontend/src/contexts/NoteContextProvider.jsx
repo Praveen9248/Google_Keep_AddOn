@@ -11,6 +11,8 @@ export const useNote = () => {
 const NoteContextProvider = ({ children }) => {
   const { user, loginUser, loginUserOAuth } = useAuth();
   const [notes, setNotes] = useState(null);
+  const [searchStatus, setSearchStatus] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
 
   const fetchNotes = async () => {
     try {
@@ -86,6 +88,24 @@ const NoteContextProvider = ({ children }) => {
     }
   };
 
+  const aiNoteHandler = async (noteId) => {
+    try {
+      const res = await service.analyzeNote(noteId);
+      fetchNotes();
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const searchNotes = async (searchText) => {
+    try {
+      return await service.searchNote(searchText);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (user) {
       fetchNotes();
@@ -101,6 +121,12 @@ const NoteContextProvider = ({ children }) => {
         removeNote,
         createNote,
         addImage,
+        aiNoteHandler,
+        searchNotes,
+        searchStatus,
+        setSearchStatus,
+        searchResults,
+        setSearchResults,
       }}
     >
       {children}

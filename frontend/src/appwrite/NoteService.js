@@ -1,17 +1,19 @@
 import conf from "../configurations/conf.js";
-import { Client, ID, Databases, Storage, Query } from "appwrite";
+import { Client, ID, Databases, Storage, Query, Functions } from "appwrite";
 import authService from "./AuthService.js";
 
 export class Service {
   client = new Client();
   databases;
   storage;
+  functions;
   constructor() {
     this.client
       .setEndpoint(conf.appwriteUrl)
       .setProject(conf.appwriteProjectId);
     this.databases = new Databases(this.client);
     this.storage = new Storage(this.client);
+    this.functions = new Functions(this.client);
   }
 
   async createNote(data) {
@@ -115,6 +117,33 @@ export class Service {
       await this.storage.updateFile(conf.appwriteBucketId, fileId, file);
     } catch (error) {
       throw error;
+    }
+  }
+
+  async analyzeNote(noteId) {
+    try {
+      const response = await this.functions.createExecution(
+        conf.appwriteFunctionId,
+        JSON.stringify({ noteId, style: "concise" })
+      );
+      const data = JSON.parse(response.responseBody);
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async searchNote(searchText) {
+    try {
+      const user = await authService.getCurrentUser();
+      const res = await this.databases.listDocuments(
+        conf.appwriteDatabaseId,
+        conf.appwriteCollectionId,
+        [Query.equal("userId", user.$id), Query.search("title", searchText)]
+      );
+      return res.documents;
+    } catch (error) {
+      console.error(error);
     }
   }
 }
