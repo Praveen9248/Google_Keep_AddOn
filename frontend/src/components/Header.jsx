@@ -25,7 +25,6 @@ const Header = () => {
   }
 
   const performSearch = debounce(async (text) => {
-    setSearchStatus(true);
     if (!text) {
       setSearchResults([]);
       return;
@@ -37,7 +36,9 @@ const Header = () => {
   }, 300);
 
   useEffect(() => {
+    setSearchStatus(true);
     performSearch(searchInput);
+    setSearchStatus(false);
   }, [searchInput]);
 
   return (
