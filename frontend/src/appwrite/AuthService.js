@@ -29,8 +29,8 @@ export class AuthService {
     try {
       return this.account.createOAuth2Session(
         "google",
-        "http://localhost:5173/",
-        "http://localhost:5173/login/"
+        "https://google-keep-add-on.vercel.app/",
+        "https://google-keep-add-on.vercel.app/login/"
       );
     } catch (error) {
       throw error;
