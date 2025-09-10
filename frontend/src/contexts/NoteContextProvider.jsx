@@ -117,7 +117,7 @@ const NoteContextProvider = ({ children }) => {
     if (user) {
       fetchNotes();
     }
-  }, [loginUserOAuth, loginUser, removeImage]);
+  }, [loginUserOAuth, loginUser]);
 
   return (
     <NoteContext.Provider
