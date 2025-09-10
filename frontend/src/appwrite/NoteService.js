@@ -85,7 +85,7 @@ export class Service {
 
   async uploadFile(file) {
     try {
-      console.log(file);
+      // console.log(file);
       return await this.storage.createFile(
         conf.appwriteBucketId,
         ID.unique(),
@@ -106,7 +106,7 @@ export class Service {
 
   async deleteFile(fileId) {
     try {
-      await this.storage.deleteFile(conf.appwriteBucketId, fileId);
+      return await this.storage.deleteFile(conf.appwriteBucketId, fileId);
     } catch (error) {
       throw error;
     }
@@ -114,7 +114,7 @@ export class Service {
 
   async updateFile(fileId, file) {
     try {
-      await this.storage.updateFile(conf.appwriteBucketId, fileId, file);
+      return await this.storage.updateFile(conf.appwriteBucketId, fileId, file);
     } catch (error) {
       throw error;
     }

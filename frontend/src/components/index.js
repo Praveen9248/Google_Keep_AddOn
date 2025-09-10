@@ -10,6 +10,7 @@ import TrashedNoteCard from "./TrashedNoteCard";
 import Login from "./Login";
 import Register from "./Register";
 import SearchResults from "./SearchResults";
+import UpdateNoteCard from "./UpdateNoteCard";
 
 export {
   NoteCard,
@@ -24,4 +25,5 @@ export {
   Login,
   Register,
   SearchResults,
+  UpdateNoteCard,
 };

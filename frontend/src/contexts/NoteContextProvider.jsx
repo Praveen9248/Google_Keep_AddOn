@@ -13,7 +13,7 @@ const NoteContextProvider = ({ children }) => {
   const [notes, setNotes] = useState(null);
   const [searchStatus, setSearchStatus] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
-
+  const [editingNote, setEditingNote] = useState(null);
   const fetchNotes = async () => {
     try {
       const res = await service.listNote();
@@ -29,25 +29,22 @@ const NoteContextProvider = ({ children }) => {
       if (res) {
         fetchNotes();
       }
+      return res;
     } catch (error) {
       console.log(error);
     }
   };
 
-  const addImage = async (imageFile, noteId) => {
+  const uploadImage = async (file) => {
     try {
       let imageUrl = null;
-      if (imageFile) {
-        const uploadedFile = await service.uploadFile(imageFile);
+      if (file) {
+        const uploadedFile = await service.uploadFile(file);
         imageUrl = service.fileUrl(uploadedFile.$id);
-      }
-      const res = await updateNote({ imageUrl: imageUrl }, noteId);
-      if (res) {
-        alert("added image succesfully");
-        fetchNotes();
+        return imageUrl;
       }
     } catch (error) {
-      console.log(error);
+      throw error.message;
     }
   };
 
@@ -62,6 +59,15 @@ const NoteContextProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
       return false;
+    }
+  };
+
+  const removeImage = async (id) => {
+    try {
+      const res = await service.deleteFile(id);
+      return res;
+    } catch (error) {
+      throw error;
     }
   };
 
@@ -82,6 +88,7 @@ const NoteContextProvider = ({ children }) => {
       const res = await updateNote(data, noteId);
       if (res) {
         console.log("changes done");
+        fetchNotes();
       }
     } catch (error) {
       console.log(error);
@@ -110,7 +117,7 @@ const NoteContextProvider = ({ children }) => {
     if (user) {
       fetchNotes();
     }
-  }, [loginUserOAuth, loginUser]);
+  }, [loginUserOAuth, loginUser, removeImage]);
 
   return (
     <NoteContext.Provider
@@ -120,13 +127,16 @@ const NoteContextProvider = ({ children }) => {
         updateNote,
         removeNote,
         createNote,
-        addImage,
         aiNoteHandler,
         searchNotes,
         searchStatus,
         setSearchStatus,
         searchResults,
         setSearchResults,
+        uploadImage,
+        editingNote,
+        setEditingNote,
+        removeImage,
       }}
     >
       {children}
